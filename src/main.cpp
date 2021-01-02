@@ -1,9 +1,12 @@
 #include <Arduino.h>
+#include "LCD.h"
 
-void setup() {
-  // put your setup code here, to run once:
+void setup() 
+{
+    LCDSetup();
+    LCDPrintMenu(3, 69);
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
+void loop() 
+{  
 }

@@ -1,12 +1,15 @@
 #include <Arduino.h>
 #include "LCD.h"
+#include "Thermistor.h"
 
 void setup() 
 {
     LCDSetup();
-    LCDPrintMenu(3, 69);
+    ThermistorInit();
+    //Serial.begin(9600);
 }
 
 void loop() 
 {  
+    LCDPrintMenu(ADC, 69);   
 }

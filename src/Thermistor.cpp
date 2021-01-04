@@ -3,9 +3,10 @@
 
 void ThermistorInit()
 {    
-    DIDR0 |= (1 << THERMISTOR_PIN);                         // Disable digital input on PC5
-    PRR &= ~(1 << PRADC);                                   // Make sure ADC is not shut down by power reduction
-    ADMUX |= THERMISTOR_PIN;                 // Input channel selection   
-    //ADCSRB &= ~(0x07);                                      // Set in free running mode
-    ADCSRA |= (1 << ADSC) | (1 << ADEN) | (1 << ADATE) | 0x07;            // Enable ADC, start conversion and set auto trigger
+    SREG |= (1 << 7);
+    DIDR0 |= (1 << THERMISTOR_PIN);       
+    DIDR0 |= (1 << POTENTIOMETER_PIN);                 
+    PRR &= ~(1 << PRADC);                                   
+    ADMUX |= POTENTIOMETER_PIN;                                                          
+    ADCSRA |= (1 << ADSC) | (1 << ADEN) | (1 << ADIE) | 0x07;            
 }

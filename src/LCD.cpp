@@ -29,9 +29,9 @@ void LCDSetup()
     LCDWriteInstruction(SET_DISPLAY);
     LCDWriteInstruction(CLEAR);
 
-    LCDPrintString("Temperature :");
+    LCDPrintString("Temperature:");
     LCDGoto(0, 1);
-    LCDPrintString("Humidity    :");
+    LCDPrintString("Humidity   :");
 }
 
 void WriteToBus(int data)
@@ -88,15 +88,15 @@ void LCDGoto(int column, int row)
 
 void LCDPrintMenu(int temperature, int humidity)
 {
-    char tempString[3];
-    char humString[3];
+    char tempString[5];
+    char humString[5];
 
-    sprintf(tempString, "%d", temperature);
-    sprintf(humString, "%d", humidity);
+    sprintf(tempString, "%4d", temperature);
+    sprintf(humString, "%4d", humidity);
 
-    LCDGoto(13, 0);
-    LCDPrintString(tempString);
-    LCDGoto(13, 1);
+    LCDGoto(12, 0);
     LCDPrintString(humString);
+    LCDGoto(12, 1);
+    LCDPrintString(tempString);
 }
  

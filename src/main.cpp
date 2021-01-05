@@ -1,23 +1,23 @@
 #include <Arduino.h>
 #include "LCD.h"
-#include "Thermistor.h"
+#include "HAL.h"
 
 volatile int temp = 0;
 volatile int pot = 0;
+char x[4];
 
 void setup() 
 {
     LCDSetup();
-    ThermistorInit();
-    Serial.begin(9600);
-    DDRD |= (1 << 6);
+    InitADC();
    
     Serial.begin(9600);
 }
 
 void loop() 
 {  
-    LCDPrintMenu(temp, pot);   
+    LCDPrintMenu(temp, pot);
+    delay(100);   
 }
 
 ISR(ADC_vect)

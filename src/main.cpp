@@ -18,17 +18,28 @@ void setup()
     LCDSetup();
     InitADC();
     InitPWM();
-   
+    
+    DDRD |= (1 << FAN_OFF_PIN);
+    PORTD |= (1 << FAN_OFF_PIN);
     Serial.begin(9600);
 }
 
 void loop() 
 {  
-    //OCR0A = map(pot, 0, 1023, 0, 255);
-    OCR2B = 4;
-    delay(2000);
-    OCR2B = 19;
-    delay(2000);
+    OCR0A = map(pot, 0, 1023, 0, 255);
+    if(map(pot, 0, 1023, 0, 255) <= 20) 
+    {
+        PORTD &= ~(1 << FAN_OFF_PIN);
+    }
+    else
+    {
+        PORTD |= (1 << FAN_OFF_PIN);
+    }
+    
+    OCR2B = map(pot, 0, 1023, 4, 19);
+    LCDPrintMenu(pot, temp);
+
+    //Serial.print(pot); Serial.print(" - "); Serial.println(temp);
 }
 
 ISR(ADC_vect)

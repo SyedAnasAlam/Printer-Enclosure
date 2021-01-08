@@ -6,6 +6,7 @@
 
 #define SERVO_PIN 3
 #define FAN_PIN 6
+#define FAN_OFF_PIN 5
 
 void InitADC();
 void InitPWM();

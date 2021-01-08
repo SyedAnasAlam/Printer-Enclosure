@@ -31,7 +31,7 @@ void LCDSetup()
 
     LCDPrintString("Temperature:");
     LCDGoto(0, 1);
-    LCDPrintString("Humidity   :");
+    LCDPrintString("Fan Speed  :");
 }
 
 void WriteToBus(int data)

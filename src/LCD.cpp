@@ -1,20 +1,20 @@
 #include "LCD.h"
 #include "Arduino.h"
 
-void LCDSetup()
+void InitLCD()
 {
     //D0 - D7 as outputs - Data pins are split between two GPIO banks
     DDRB |= 0x0F;   // PB0, PB1, PB2, PB3
     DDRC |= 0x0F;   // PC0, PC1, PC2, PC3
 
     //E + RS as outputs
-    DDRB |= (1 << E);
-    DDRD |= (1 << RS);
+    DDRB |= (1 << ENABLE_PIN);
+    DDRD |= (1 << RS_PIN);
 
     delay(50);
 
     //Initialize E low
-    PORTB &= ~(1 << E);
+    PORTB &= ~(1 << ENABLE_PIN);
 
     //Initialization process
     LCDWriteInstruction(FUNCT_SET);
@@ -29,6 +29,7 @@ void LCDSetup()
     LCDWriteInstruction(SET_DISPLAY);
     LCDWriteInstruction(CLEAR);
 
+    //Text that will always be displayed on LCD
     LCDPrintString("Temperature:");
     LCDGoto(0, 1);
     LCDPrintString("Fan Speed  :");
@@ -38,6 +39,7 @@ void WriteToBus(int data)
 {
     PORTB &= ~B00001111;
     PORTC &= ~B00001111;
+
     // Get first and second half of the data
     char data03 = data & 0x0F;
     char data47 = (data & (0x0F << 4)) >> 4;
@@ -49,24 +51,24 @@ void WriteToBus(int data)
 
 void PulseEnable()
 {
-    PORTB &= ~(1 << E);
+    PORTB &= ~(1 << ENABLE_PIN);
     delayMicroseconds(1);
-    PORTB |= (1 << E);
+    PORTB |= (1 << ENABLE_PIN);
     delayMicroseconds(1);
-    PORTB &= ~(1 << E);
+    PORTB &= ~(1 << ENABLE_PIN);
     delayMicroseconds(100);
 }
 
 void LCDPrintChar(char ch)
 {
-    PORTD |= (1 << RS);
+    PORTD |= (1 << RS_PIN);
     WriteToBus(ch);
     PulseEnable();
 }
 
 void LCDWriteInstruction(int instruction)
 {
-    PORTD &= ~(1 << RS);
+    PORTD &= ~(1 << RS_PIN);
     WriteToBus(instruction);
     PulseEnable();
     delay(5);
@@ -86,16 +88,16 @@ void LCDGoto(int column, int row)
     LCDWriteInstruction((row == 0 ? 0x80  : 0xC0) + column);    		
 }
 
-void LCDPrintMenu(int temperature, int humidity)
+void LCDPrintMenu(int temperature, int fan)
 {
     char tempString[5];
-    char humString[5];
+    char fanString[5];
 
     sprintf(tempString, "%4d", temperature);
-    sprintf(humString, "%4d", humidity);
+    sprintf(fanString, "%4d", fan);
 
     LCDGoto(12, 0);
-    LCDPrintString(humString);
+    LCDPrintString(fanString);
     LCDGoto(12, 1);
     LCDPrintString(tempString);
 }

@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "Components.h"
+#include "Constants.h"
 
 void InitADC()
 {                 
@@ -17,11 +18,21 @@ void InitFan()
     TCCR0B  |= (1 << CS00);                                 // No prescaling
 }
 
+void FanPWMWrite(int pwm) 
+{ 
+    OCR0A = pwm; 
+}
+
 void InitServo()
 {
     DDRD    |= (1 << SERVO_PIN);                // Set as output
     TCCR2A  |= (1 << COM2B1) | (1 << WGM20);    // Phase and frequency mode on pin PD3
     TCCR2B  |= (1 << CS21) | (1 << CS20);       // Prescaling to 32
+}
+
+void ServoWrite(int position)
+{
+     OCR2B = position; 
 }
 
 void InitButton()
@@ -42,17 +53,23 @@ void WriteLED(int ledPin, boolean val)
     else PORTC &= ~(1 << ledPin);
 }
 
-boolean ScanFingerprint(Adafruit_Fingerprint finger) 
+int GetTemp(int thermistor)
 {
-  uint8_t p = finger.getImage();
+    int rt = R1 * ((1023/thermistor) - 1.0);
+    return (1.0/(A + B*log(rt) + C*(pow(log(rt), 3)))) - 273.15;
+}
+
+boolean ScanFingerprint(Adafruit_Fingerprint fpSensor) 
+{
+  uint8_t p = fpSensor.getImage();
   if (p != FINGERPRINT_OK) return false;
   
 
-  p = finger.image2Tz();
+  p = fpSensor.image2Tz();
   if (p != FINGERPRINT_OK) return false;
 
 
-  p = finger.fingerFastSearch();
+  p = fpSensor.fingerFastSearch();
   if (p != FINGERPRINT_OK) return false;
   
   // found a match!

@@ -18,10 +18,18 @@
 #define SERVO_UNLOCK_POS 19
 
 void InitADC();
-void InitFan();
-void InitServo();
-void InitButton();
-void InitLEDS();
-void WriteLED(int ledPin, boolean onOff);
 
-boolean ScanFingerprint(Adafruit_Fingerprint finger);
+void InitFan();
+void FanPWMWrite(int pwm); 
+
+void InitServo();
+void ServoWrite(int position); 
+
+void InitButton();
+
+void InitLEDS();
+void WriteLED(int ledPin, boolean val);
+
+int GetTemp(int thermistor);
+
+boolean ScanFingerprint(Adafruit_Fingerprint fpSenspor);

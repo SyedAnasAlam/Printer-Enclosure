@@ -30,11 +30,13 @@ void InitLCD()
     LCDWriteInstruction(CLEAR);
 
     //Text that will always be displayed on LCD
-    LCDPrintString("Temperature:");
-    LCDGoto(0, 1);
     LCDPrintString("Fan Speed  :");
+    LCDGoto(0, 1);
+    LCDPrintString("Temperature:");
+    
 }
 
+// This function writes to the databus of LCD screen
 void WriteToBus(int data)
 {
     PORTB &= ~B00001111;
@@ -74,7 +76,7 @@ void LCDWriteInstruction(int instruction)
     delay(5);
 }
 
-void LCDPrintString(const char *s)
+void LCDPrintString(const char * s)
 {
 	while(*s != 0)
 	{
@@ -90,11 +92,11 @@ void LCDGoto(int column, int row)
 
 void LCDPrintMenu(int temperature, int fan)
 {
-    char tempString[5];
-    char fanString[5];
+    char tempString[6];
+    char fanString[6];
 
-    sprintf(tempString, "%4d", temperature);
-    sprintf(fanString, "%4d", fan);
+    sprintf(tempString, "%-3dC", temperature);
+    sprintf(fanString, "%-3d%%", fan);
 
     LCDGoto(12, 0);
     LCDPrintString(fanString);

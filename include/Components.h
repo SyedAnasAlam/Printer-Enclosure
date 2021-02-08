@@ -15,7 +15,7 @@
 #define SCAN_LED_PIN 4
 
 #define SERVO_LOCK_POS 4
-#define SERVO_UNLOCK_POS 19
+#define SERVO_UNLOCK_POS 11
 
 void InitADC();
 
